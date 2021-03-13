@@ -1,4 +1,4 @@
-name: 'Run golangci-lint with reviewdog'
+name: 'Run golangci-lint on multiple (go) modules with reviewdog'
 description: '🐶 Run golangci-lint with reviewdog on pull requests to improve code review experience.'
 author: 'haya14busa (reviewdog)'
 inputs:
