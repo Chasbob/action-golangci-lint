@@ -1,26 +1,13 @@
 #!/bin/bash
 
 function golangci-multi-module() {
-  # git ref to check 
-  FILE_FILTER="go$"
-  if [[ ${INPUT_MULTI_MODULE} ]]
-  then
-    # shellcheck disable=SC2086
-    golangci-lint run --out-format line-number ${INPUT_GOLANGCI_LINT_FLAGS}
-    return
-  fi
-  FILES=$(git diff-tree --no-commit-id --name-only -r "${GITHUB_SHA}"| grep "${FILE_FILTER}")
-  MODULES=$(find . -type f -name 'go.mod' -exec dirname {} \; 2>/dev/null | cut -c 3- | sort | uniq)
-  
-  for m in $MODULES; do
-    PKGs=$(echo "$FILES" | grep "^$m" | cut -d '/' -f2- | xargs -I ff dirname ff | sort | uniq | tr '\n' ' ')
-    if [[ ! "$PKGs" == '' ]]; then
-      pushd "$m" >/dev/null || continue
-      # shellcheck disable=SC2086
-      golangci-lint run --out-format line-number ${GOLANGCI_LINT_FLAGS} --path-prefix="$m" $PKGs
-      popd >/dev/null || continue
-    fi
-  done
+    MODULES=$(find . -type f -name 'go.mod' -exec dirname {} \; 2>/dev/null | sort | uniq)
+    for m in $MODULES; do
+        pushd "${GITHUB_WORKSPACE}/$m" >/dev/null 2>&1 || continue
+        # shellcheck disable=SC2086
+        golangci-lint run --out-format line-number ${GOLANGCI_LINT_FLAGS} --path-prefix="$m" ./...
+        popd >/dev/null 2>&1 || continue
+    done
 }
 
 cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit 1
