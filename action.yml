@@ -34,6 +34,9 @@ inputs:
   workdir:
     description: 'Working directory relative to the root directory.'
     default: '.'
+  diff:
+    description: 'diff command used by reviewdog'
+    default: 'git diff FETCH_HEAD'
 runs:
   using: 'composite'
   steps:
@@ -55,6 +58,7 @@ runs:
         INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
         INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
         INPUT_WORKDIR: ${{ inputs.workdir }}
+        INPUT_DIFF: ${{ inputs.diff }}
 branding:
   icon: 'check-circle'
   color: 'blue'

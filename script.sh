@@ -34,5 +34,6 @@ golangci-multi-module \
       -filter-mode="${INPUT_FILTER_MODE:-added}" \
       -fail-on-error="${INPUT_FAIL_ON_ERROR:-false}" \
       -level="${INPUT_LEVEL}" \
+      -diff="${INPUT_DIFF}" \
       ${INPUT_REVIEWDOG_FLAGS}
 echo '::endgroup::'
